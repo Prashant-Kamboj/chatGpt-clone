@@ -1,4 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import "../tailwind.css"; // Ensure TailwindCSS is imported globally
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

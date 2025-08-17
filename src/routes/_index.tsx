@@ -1,3 +1,5 @@
-export default function MyComponent() {
-  return <div>Hello World</div>;
-}
+import { redirect } from "react-router";
+
+export const loader = async () => {
+  return redirect("/chatGpt");
+};
