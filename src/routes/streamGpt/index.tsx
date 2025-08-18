@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { Header } from "components/Header";
-
+import remarkGfm from "remark-gfm";
 import React, { useRef, useState } from "react";
 import { Loader2Icon } from "lucide-react";
 import { parse } from "partial-json";
@@ -87,7 +87,7 @@ export default function ChatComponent() {
                     {item?.request?.length ? item.request : null}
                   </p>
                 </div>
-                <ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {item?.response?.length ? item.response : null}
                 </ReactMarkdown>
               </React.Fragment>

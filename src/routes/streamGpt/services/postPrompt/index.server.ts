@@ -20,17 +20,37 @@ export const postPrompt = async (prompt: string) => {
       ],
       stream: true,
     });
-    return completion.toReadableStream();
 
-    // return new Response(completion.toReadableStream(), {
-    //   headers: {
-    //     "Content-Type": "text/event-stream",
-    //     "Cache-Control": "no-cache",
-    //     Connection: "keep-alive",
-    //   },
-    // });
-    // return completion.choices[0].message.content; // Return the response content
+    const stream = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of completion) {
+          const content = chunk.choices[0]?.delta?.content || "";
+          controller.enqueue(new TextEncoder().encode(content));
+        }
+        controller.close();
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/plain",
+        "Transfer-Encoding": "chunked",
+      },
+    });
   } catch (error: any) {
     return `Rate limit exceeded or an error occurred: ${error?.message}`;
   }
 };
+
+// const reader = response.data.getReader() -> response.body -> fetcher.data.getReader();
+// const decoder = new TextDecoder();
+// while(true) {
+// const {value, done}  = await reder.read();
+// if(done) {
+//   break;}
+// data += decoder.decode(value);
+// parsed = JSON.parse(data);
+// if(parsed.answer) {
+//   setState to update react
+// }
+// }
