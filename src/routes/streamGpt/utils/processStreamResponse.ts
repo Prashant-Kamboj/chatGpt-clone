@@ -1,4 +1,10 @@
-export const processStreamResponse = async ({ response, onChunk }) => {
+export const processStreamResponse = async ({
+  response,
+  onChunk,
+}: {
+  response: any;
+  onChunk: any;
+}) => {
   console.log(response, "response in processStreamResponse");
   const reader = await response.body?.getReader();
   console.log(reader, "reader in processStreamResponse");
@@ -15,8 +21,8 @@ export const processStreamResponse = async ({ response, onChunk }) => {
     const chunks = stream?.value
       .replaceAll(/^data: /gm, "")
       .split("\n")
-      .filter((c) => Boolean(c.length) && c !== "[DONE]")
-      .map((c) => JSON.parse(c));
+      .filter((c: any) => Boolean(c.length) && c !== "[DONE]")
+      .map((c: any) => JSON.parse(c));
 
     for (let chunk of chunks) {
       const content = chunk.choices[0].delta.content;
